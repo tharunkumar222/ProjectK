@@ -14,8 +14,16 @@ import {
 } from "recharts";
 import "./styles.css";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+function normalizeApiBaseUrl(value) {
+  const fallbackUrl = "http://localhost:5000/api";
+  const resolvedValue = String(value || fallbackUrl).trim().replace(/\/+$/, "");
+
+  return /\/api$/i.test(resolvedValue)
+    ? resolvedValue
+    : `${resolvedValue}/api`;
+}
+
+const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL);
 const ASSET_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
 const AUTH_STORAGE_KEY = "livwell-auth";
 
